@@ -42,31 +42,34 @@
     font-size: 1.5rem;
     letter-spacing: 1.2px;
   }
-  nav div a {
-    color: #c5d9f9;
-    margin-left: 1.8rem;
-    font-weight: 500;
-    font-size: 1.1rem;
-    position: relative;
-    padding-bottom: 3px;
-    transition: color 0.3s ease;
-  }
-  nav div a:hover {
-    color: #f0f4f8;
-  }
-  nav div a::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 0%;
-    height: 2px;
-    background: #7aaeff;
-    transition: width 0.3s ease;
-  }
-  nav div a:hover::after {
-    width: 100%;
-  }
+  nav div {
+  display: flex;
+  gap: 1.8rem;
+}
+
+.nav-btn {
+  background: linear-gradient(135deg, #4472ff, #7aaeff);
+  border: none;
+  color: white;
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 8px 20px;
+  border-radius: 40px;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(122, 174, 255, 0.6);
+  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.nav-btn:hover {
+  background: linear-gradient(135deg, #2a53e0, #5c8edb);
+  box-shadow: 0 8px 20px rgba(42, 83, 224, 0.8);
+  transform: translateY(-2px);
+}
+
+.nav-btn:active {
+  transform: translateY(1px);
+}
+
 
   /* Back button */
   #back-btn {
@@ -304,12 +307,13 @@
 </head>
 <body>
   <nav>
-    <h2>Happy Birthday To Manus</h2>
-    <div>
-      <a onclick="showPopupText('about')">เกี่ยวกับ</a>
-      <a onclick="showPopupText('rules')">กติกา</a>
-    </div>
-  </nav>
+  <h2>HBD To Manus</h2>
+  <div>
+    <button type="button" class="nav-btn" onclick="showPopupText('about')">เกี่ยวกับ</button>
+    <button type="button" class="nav-btn" onclick="showPopupText('rules')">กติกา</button>
+  </div>
+</nav>
+
 
   <div id="back-btn">
     <button onclick="goBack()">⬅ ย้อนกลับ</button>
@@ -418,7 +422,7 @@
       title.textContent = 'กติกาเกม';
       text.innerHTML = `
         เกมนี้เป็นเกมจิ๊กซอว์ง่ายๆครับ 🎯<br><br>
-        👉 แค่ลากแต่ละชิ้นไปวางให้ถูกตำแหน่ง <br>
+        👉 แค่กดแช่จิกซอว์แล้วลากแต่ละชิ้นไปวางให้ถูกตำแหน่ง <br>
         👉 ถ้าต่อครบแล้วถูกต้องทั้งหมด จะมีคำอวยพรขึ้นมาให้ครับ <br><br>
         ขอให้สนุกนะครับ 🎈
       `;
