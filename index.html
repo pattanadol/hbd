@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>สุขสันต์วันเกิดน้านัส</title>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  /* Reset & base */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: 'Prompt', sans-serif;
+    background: linear-gradient(135deg, #a8d0ff, #374785);
+    color: #1b2a49;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  a {
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  /* Nav */
+  nav {
+    background: #243b55;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  nav h2 {
+    color: #f0f4f8;
+    font-weight: 600;
+    font-size: 1.5rem;
+    letter-spacing: 1.2px;
+  }
+  nav div a {
+    color: #c5d9f9;
+    margin-left: 1.8rem;
+    font-weight: 500;
+    font-size: 1.1rem;
+    position: relative;
+    padding-bottom: 3px;
+    transition: color 0.3s ease;
+  }
+  nav div a:hover {
+    color: #f0f4f8;
+  }
+  nav div a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0%;
+    height: 2px;
+    background: #7aaeff;
+    transition: width 0.3s ease;
+  }
+  nav div a:hover::after {
+    width: 100%;
+  }
+
+  /* Back button */
+  #back-btn {
+    display: none;
+    padding: 1rem 2rem;
+    background: #e8f0ff;
+    box-shadow: 0 4px 10px rgba(122, 174, 255, 0.3);
+    margin: 1rem auto;
+    max-width: 800px;
+    border-radius: 30px;
+    text-align: left;
+  }
+  #back-btn button {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #374785;
+    background: #7aaeff;
+    border: none;
+    padding: 10px 28px;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(122, 174, 255, 0.7);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  #back-btn button:hover {
+    background-color: #5c8edb;
+    box-shadow: 0 8px 20px rgba(92, 142, 219, 0.8);
+  }
+
+  /* Pages styling */
+  #intro-page, #game-page, #wish-page {
+    max-width: 800px;
+    margin: 2rem auto 4rem;
+    background: rgba(255 255 255 / 0.9);
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    padding: 3rem 2.5rem;
+    text-align: center;
+    animation: fadeIn 0.7s ease forwards;
+  }
+  #game-page, #wish-page {
+    display: none;
+  }
+
+  /* Header text */
+  header h1 {
+    font-size: 2.6rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    color: #243b55;
+  }
+  header p {
+    font-size: 1.3rem;
+    line-height: 1.7;
+    color: #3d4e6f;
+  }
+
+  /* Buttons */
+  .start-btn {
+    margin-top: 3rem;
+    background: linear-gradient(135deg, #4472ff, #7aaeff);
+    border: none;
+    color: white;
+    font-weight: 700;
+    font-size: 1.25rem;
+    padding: 16px 48px;
+    border-radius: 40px;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(122, 174, 255, 0.6);
+    transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  }
+  .start-btn:hover {
+    background: linear-gradient(135deg, #2a53e0, #5c8edb);
+    box-shadow: 0 12px 25px rgba(92, 142, 219, 0.9);
+    transform: translateY(-3px);
+  }
+  .start-btn:active {
+    transform: translateY(1px);
+  }
+
+  /* Puzzle board */
+  #puzzle-board {
+    margin: 2rem auto 3rem;
+    width: 350px;
+    height: 460px;
+    border-radius: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 2px;
+    background: #f0f4ff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+    border: 5px solid #7aaeff;
+  }
+  .piece {
+    border-radius: 14px;
+    cursor: grab;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+    background-size: 300% 300%;
+    transition: box-shadow 0.3s ease;
+  }
+  .piece:active {
+    cursor: grabbing;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+  }
+
+  /* Shuffle button */
+  .center-btn {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+  #shuffleBtn {
+    font-size: 1.2rem;
+    padding: 12px 36px;
+    border-radius: 35px;
+    border: none;
+    background: #f3f7ff;
+    color: #4472ff;
+    font-weight: 600;
+    box-shadow: 0 6px 15px rgba(68, 114, 255, 0.3);
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+  }
+  #shuffleBtn:hover {
+    background-color: #4472ff;
+    color: white;
+    box-shadow: 0 10px 25px rgba(68, 114, 255, 0.7);
+    transform: translateY(-2px);
+  }
+  #shuffleBtn:active {
+    transform: translateY(1px);
+  }
+
+  /* Popup overlays */
+  .popup {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(36, 59, 85, 0.8);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    animation: fadeIn 0.3s ease forwards;
+  }
+  .popup-content {
+    background: white;
+    padding: 30px 40px;
+    border-radius: 24px;
+    max-width: 90%;
+    width: 400px;
+    box-shadow: 0 10px 35px rgba(36, 59, 85, 0.2);
+    text-align: center;
+    font-size: 1.1rem;
+    color: #243b55;
+    position: relative;
+  }
+  .popup-content h2 {
+    margin-top: 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .popup-content p {
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+  .popup-content button {
+    background: #4472ff;
+    border: none;
+    color: white;
+    font-weight: 700;
+    padding: 12px 40px;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(68, 114, 255, 0.6);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  }
+  .popup-content button:hover {
+    background-color: #2a53e0;
+    box-shadow: 0 12px 28px rgba(42, 83, 224, 0.9);
+    transform: translateY(-3px);
+  }
+  .popup-content button:active {
+    transform: translateY(1px);
+  }
+
+  /* Wish page image */
+  #wish-page img {
+    max-width: 280px;
+    border-radius: 20px;
+    margin: 2rem 0;
+    box-shadow: 0 10px 30px rgba(36, 59, 85, 0.3);
+    transition: transform 0.4s ease;
+  }
+  #wish-page img:hover {
+    transform: scale(1.05);
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    #puzzle-board {
+      width: 280px;
+      height: 360px;
+    }
+    #wish-page img {
+      max-width: 220px;
+    }
+    .start-btn, #shuffleBtn {
+      font-size: 1rem;
+      padding: 14px 36px;
+    }
+    nav h2 {
+      font-size: 1.3rem;
+    }
+    nav div a {
+      font-size: 1rem;
+      margin-left: 1rem;
+    }
+  }
+</style>
+</head>
+<body>
+  <nav>
+    <h2>Happy Birthday To Manus</h2>
+    <div>
+      <a onclick="showPopupText('about')">เกี่ยวกับ</a>
+      <a onclick="showPopupText('rules')">กติกา</a>
+    </div>
+  </nav>
+
+  <div id="back-btn">
+    <button onclick="goBack()">⬅ ย้อนกลับ</button>
+  </div>
+
+  <div id="intro-page">
+    <header>
+      <h1>เว็บเซอร์ไพรส์วันเกิดน้านัส 🎂</h1>
+      <p>
+        วันนี้เป็นวันพิเศษของน้านัส<br>
+       เลยทำเว็บนี้ขึ้นมาเพื่อเซอร์ไพรส์น้านัสโดยเฉพาะครับ<br>
+
+  
+      <button class="start-btn" onclick="startGame()">เริ่มเกมเลย 🚀</button>
+    </header>
+  </div>
+
+  <div id="game-page">
+    <h1>🎁 ช่วยต่อจิ๊กซอว์ให้หน่อยครับ</h1>
+    <div id="puzzle-board"></div>
+    <div class="center-btn">
+      <button id="shuffleBtn">🔄 สลับตำแหน่ง</button>
+    </div>
+  </div>
+
+  <div class="popup" id="successPopup">
+    <div class="popup-content">
+      <h2>เก่งมากครับ! 🎉</h2>
+      <p>ยินดีด้วยที่ต่อจิ๊กซอว์เสร็จแล้ว!</p>
+      <button onclick="goToWishPage()">รับคำอวยพร 🎁</button>
+    </div>
+  </div>
+
+  <div class="popup" id="infoPopup">
+    <div class="popup-content">
+      <h2 id="popup-title"></h2>
+      <p id="popup-text"></p>
+      <button onclick="closePopup()">ปิด</button>
+    </div>
+  </div>
+
+  <div id="wish-page">
+    <header>
+      <h1>สุขสันต์วันเกิดครับน้านัส 🎉</h1>
+      <img src="nat4.jpg" alt="น้านัส" />
+      <p>
+        ขอให้น้านัสมีความสุข สุขภาพแข็งแรง คิดหวังสิ่งใดสมปราถนา และขอให้น้าพบแต่สิ่งดีๆ มีผู้คนดีๆ เข้ามาเติมเต็มชีวิต
+และได้รับโอกาสใหม่ๆ ที่จะช่วยเสริมสร้างความก้าวหน้าและความมั่นคงในทุกๆด้าน
+ขอให้น้ารู้สึกภาคภูมิใจในสิ่งที่ได้ทำมาและมีแรงใจในการเดินหน้าต่อไปในอนาคต
+<br><br>
+        ขอบคุณที่ซัพพอร์ตมาหลายๆอย่างครับ 🙏💙
+      </p>
+    </header>
+  </div>
+
+<script>
+  const board = document.getElementById('puzzle-board');
+  const popup = document.getElementById('successPopup');
+  const introPage = document.getElementById('intro-page');
+  const gamePage = document.getElementById('game-page');
+  const wishPage = document.getElementById('wish-page');
+  const backBtn = document.getElementById('back-btn');
+
+  let currentPage = 'intro';
+
+  function startGame() {
+    introPage.style.display = 'none';
+    gamePage.style.display = 'block';
+    backBtn.style.display = 'block';
+    currentPage = 'game';
+  }
+
+  function goToWishPage() {
+    popup.style.display = 'none';
+    gamePage.style.display = 'none';
+    wishPage.style.display = 'block';
+    currentPage = 'wish';
+  }
+
+  function goBack() {
+    if (currentPage === 'game') {
+      gamePage.style.display = 'none';
+      introPage.style.display = 'block';
+      backBtn.style.display = 'none';
+      currentPage = 'intro';
+    } else if (currentPage === 'wish') {
+      wishPage.style.display = 'none';
+      gamePage.style.display = 'block';
+      currentPage = 'game';
+    }
+  }
+
+  function showPopupText(type) {
+    const popup = document.getElementById('infoPopup');
+    const title = document.getElementById('popup-title');
+    const text = document.getElementById('popup-text');
+
+    if (type === 'about') {
+      title.textContent = 'เกี่ยวกับเว็บนี้';
+      text.innerHTML = `
+        เว็บนี้สร้างขึ้นด้วยความตั้งใจจะเอามาเซอร์ไพรส์วันเกิดน้านัสครับ 🎉<br><br>
+        นั่งเขียนเว็บนี้ขึ้นมาเป็นเว็บง่ายๆไว้เล่นเกมเล็กๆแล้วได้อ่านคำอวยพรครับ<br><br>
+        ตอนทำก็เจอบั๊กบ้าง ดีไซน์งงๆ โค้ดพังบ้าง แต่ก็สนุกและภูมิใจมากครับที่ได้ทำจนเสร็จมาให้เล่นได้ 💙
+      `;
+    } else if (type === 'rules') {
+      title.textContent = 'กติกาเกม';
+      text.innerHTML = `
+        เกมนี้เป็นเกมจิ๊กซอว์ง่ายๆครับ 🎯<br><br>
+        👉 แค่ลากแต่ละชิ้นไปวางให้ถูกตำแหน่ง <br>
+        👉 ถ้าต่อครบแล้วถูกต้องทั้งหมด จะมีคำอวยพรขึ้นมาให้ครับ <br><br>
+        ขอให้สนุกนะครับ 🎈
+      `;
+    }
+
+    popup.style.display = 'flex';
+  }
+
+  function closePopup() {
+    document.getElementById('infoPopup').style.display = 'none';
+  }
+
+  const cols = 3;
+  const rows = 3;
+  let pieces = [];
+  const image = 'nat3.jpg';
+
+  function createPuzzle() {
+    board.innerHTML = '';
+    pieces = [];
+    for (let i = 0; i < cols * rows; i++) {
+      const piece = document.createElement('div');
+      piece.classList.add('piece');
+      piece.dataset.correctIndex = i;
+      const row = Math.floor(i / cols);
+      const col = i % cols;
+      piece.style.backgroundImage = `url('${image}')`;
+      piece.style.backgroundPosition = `${(col * 100) / (cols - 1)}% ${(row * 100) / (rows - 1)}%`;
+      piece.style.backgroundSize = `${cols * 100}% ${rows * 100}%`;
+      piece.draggable = true;
+      piece.addEventListener('dragstart', dragStart);
+      piece.addEventListener('dragover', dragOver);
+      piece.addEventListener('drop', drop);
+      piece.addEventListener('dragend', dragEnd);
+      pieces.push(piece);
+      board.appendChild(piece);
+    }
+  }
+
+  let dragSrcIndex = null;
+
+  function dragStart(e) {
+    dragSrcIndex = pieces.indexOf(this);
+    e.dataTransfer.setData('text/html', this.outerHTML);
+    this.style.opacity = '0.5';
+  }
+  function dragOver(e) { e.preventDefault(); }
+  function drop(e) {
+    e.stopPropagation();
+    const dragTargetIndex = pieces.indexOf(this);
+    if (dragSrcIndex === dragTargetIndex) return;
+    swapPieces(dragSrcIndex, dragTargetIndex);
+    if (checkWin()) setTimeout(showPopup, 300);
+  }
+  function dragEnd() { this.style.opacity = '1'; }
+  function swapPieces(i, j) {
+    [pieces[i], pieces[j]] = [pieces[j], pieces[i]];
+    pieces.forEach(p => board.appendChild(p));
+  }
+  function shufflePuzzle() {
+    for (let i = pieces.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      swapPieces(i, j);
+    }
+  }
+  function checkWin() {
+    return pieces.every((p, i) => Number(p.dataset.correctIndex) === i);
+  }
+  function showPopup() {
+    popup.style.display = 'flex';
+  }
+
+  document.getElementById('shuffleBtn').addEventListener('click', shufflePuzzle);
+
+  createPuzzle();
+  shufflePuzzle();
+</script>
+</body>
+</html>
